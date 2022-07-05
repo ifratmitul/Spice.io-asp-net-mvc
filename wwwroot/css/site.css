@@ -16,3 +16,33 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.search-background {
+    background: url('/images/background.png');
+}
+
+.app-background {
+    background: url('/images/dust_scratches.png');
+}
+
+.background-white-border {
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    border: 1px solid;
+}
+
+.background-white {
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.background-white-border-p10 {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
