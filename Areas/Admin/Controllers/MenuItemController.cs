@@ -100,15 +100,18 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost()
+        public async Task<IActionResult> EditPost(int? id)
         {
+
+            if (id == null) return NotFound();
             MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
             //if (!ModelState.IsValid)
             //{
+                  //MenuItemVM.SubCategories = await _dbContext.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
             //    return View(MenuItemVM);
             //}
-            _dbContext.MenuItem.Add(MenuItemVM.MenuItem);
+            //_dbContext.MenuItem.Add(MenuItemVM.MenuItem);
             //await _dbContext.SaveChangesAsync();
             //Image upload start
             string webRootPath = _webHostEnvironment.WebRootPath;
@@ -119,25 +122,29 @@ namespace Spice.Areas.Admin.Controllers
             if (file.Count > 0)
             {
                 var uploads = Path.Combine(webRootPath, "images");
-                var extension = Path.GetExtension(file[0].FileName);
-                using (FileStream? fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension), FileMode.Create))
+                var extension_new = Path.GetExtension(file[0].FileName);
+
+                //delete previous image
+                var imagePath = Path.Combine(webRootPath, menuItemfromDb.Image.TrimStart('\\'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                using (FileStream? fileStream = new FileStream(Path.Combine(uploads, MenuItemVM.MenuItem.Id + extension_new), FileMode.Create))
                 {
                     file[0].CopyTo(fileStream);
                 };
 
-                MenuItemVM.MenuItem.Image = @"\images\" + MenuItemVM.MenuItem.Id + extension;
+                menuItemfromDb.Image = @"\images\" + MenuItemVM.MenuItem.Id + extension_new;
             }
-            else
-            {
-                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultFoodImage);
-                System.IO.File.Copy(uploads, webRootPath + @"\images\" + MenuItemVM.MenuItem.Id + ".png");
-                MenuItemVM.MenuItem.Image = @"\images\" + MenuItemVM.MenuItem.Id + ".png";
-            }
-            //image upload end
+            menuItemfromDb.Name = MenuItemVM.MenuItem.Name;
+            menuItemfromDb.Description = MenuItemVM.MenuItem.Description;
+            menuItemfromDb.Spicyness = MenuItemVM.MenuItem.Spicyness;
+            menuItemfromDb.Price = MenuItemVM.MenuItem.Price;
+            menuItemfromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
+            menuItemfromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
 
-            //Issue available in creating here....
-
-            //_dbContext.MenuItem.Add(MenuItemVM.MenuItem);
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

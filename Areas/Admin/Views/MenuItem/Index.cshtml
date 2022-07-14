@@ -29,16 +29,17 @@
                         <th scope="col">@Html.DisplayNameFor(m => m.Price)</th>
                         <th scope="col">@Html.DisplayNameFor(m => m.CategoryId)</th>
                         <th scope="col">@Html.DisplayNameFor(m => m.SubCategoryId)</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr class="d-flex justify-content-between">
-                            <td class="d-flex align-items-center">@Html.DisplayFor(m => item.Name) </td>
-                            <td class="d-flex align-items-center">@Html.DisplayFor(m => item.Price) </td>
-                            <td class="d-flex align-items-center">@Html.DisplayFor(m => item.Category.Name) </td>
-                            <td class="d-flex align-items-center">@Html.DisplayFor(m => item.SubCategory.Name) </td>
+                            <td>@Html.DisplayFor(m => item.Name) </td>
+                            <td>@Html.DisplayFor(m => item.Price) </td>
+                            <td>@Html.DisplayFor(m => item.Category.Name) </td>
+                            <td>@Html.DisplayFor(m => item.SubCategory.Name) </td>
                             <td>
                                 <partial name="_TableButtonPartial" model="item.Id" />
                             </td>
