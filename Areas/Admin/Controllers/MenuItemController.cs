@@ -109,14 +109,6 @@ namespace Spice.Areas.Admin.Controllers
             if (id == null) return NotFound();
             MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            //if (!ModelState.IsValid)
-            //{
-                  //MenuItemVM.SubCategories = await _dbContext.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
-            //    return View(MenuItemVM);
-            //}
-            //_dbContext.MenuItem.Add(MenuItemVM.MenuItem);
-            //await _dbContext.SaveChangesAsync();
-            //Image upload start
             string webRootPath = _webHostEnvironment.WebRootPath;
             var file = HttpContext.Request.Form.Files;
             var menuItemfromDb = await _dbContext.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
@@ -152,6 +144,28 @@ namespace Spice.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
 
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null) return NotFound();
+            var menuItem = await _dbContext.MenuItem.FindAsync(id);
+            if (menuItem == null) return View();
+            var image = menuItem.Image;
+            _dbContext.MenuItem.Remove(menuItem);
+            var res = await _dbContext.SaveChangesAsync() > 0;
+            if(res)
+            {
+                string webRootPath = _webHostEnvironment.WebRootPath;
+                var imagePath = Path.Combine(webRootPath, image.TrimStart('\\'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+            }
+                
+            return RedirectToAction(nameof(Index));
         }
 
     }

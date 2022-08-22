@@ -2,39 +2,60 @@
 
 <br />
 
-@if(Model.Coupon.ToList().Count > 0)
+@if (Model.Coupon.ToList().Count > 0)
 {
-<div class="border">
-    <div class="carousel" data-ride="carousel" data-interval="2500">
-        @for (int i = 0; i < Model.Coupon?.Count(); i++)
+    <div class="border">
+        <div class="carousel" data-ride="carousel" data-interval="2500">
+            @for (int i = 0; i < Model.Coupon?.Count(); i++)
+            {
+                if (i == 0 && Model.Coupon.ToList()[i].Picture != null)
+                {
+                    <div class="carousel-item active">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                            var imgSrc = string.Format($"data:image/jpg;base64{base64}");
+                        }
+
+                        <img src="@imgSrc" height="50px" class="d-block w-100" />
+                    </div>
+                }
+                else if (i > 0)
+                {
+                    <div class="carousel-item">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                            var imgSrc = string.Format("data:image/jpg;base64{0}", base64);
+                        }
+
+                        <img src="@imgSrc" height="50px" class="d-block w-100" />
+                        <p>Hello</p>
+                    </div>
+
+                }
+            }
+        </div>
+
+
+    </div>
+}
+
+@if (Model.MenuItem.Count() > 0)
+{
+    <div class="d-flex">
+        @foreach (var item in Model.MenuItem)
         {
-            if (i == 0 && Model.Coupon.ToList()[i].Picture != null)
-            {
-                <div class="carousel-item active">
-                    @{
-                        var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
-                        var imgSrc = string.Format($"data:image/jpg;base64{base64}");
-                    }
-
-                    <img src="@imgSrc" height="50px" class="d-block w-100" />
+            <div class="card p-2 m-2" style="width: 18rem;">
+                <img class="card-img-top" src="@item.Image" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(m => item.Name) </h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a asp-action="Details" asp-route-Id="@item.Id" class="btn btn-sm btn-outline-success">See Details</a>
                 </div>
-            }
-            else if (i > 0)
-            {
-                <div class="carousel-item">
-                    @{
-                        var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
-                        var imgSrc = string.Format("data:image/jpg;base64{0}", base64);
-                    }
-
-                    <img src="@imgSrc" height="50px" class="d-block w-100" />
-                    <p>Hello</p>
-                </div>
-
-            }
+            </div>
         }
     </div>
-</div>
+
+
 }
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>

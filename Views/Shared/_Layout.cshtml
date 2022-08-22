@@ -1,4 +1,6 @@
 ﻿@using Spice.Utility;
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor httpContextAccessor;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,11 +66,30 @@
                             </li>
                         }
 
-                        <li style="color:white">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-shopping-cart"></i> Cart
-                            </a>
-                        </li>
+                        @if (httpContextAccessor.HttpContext.Session.GetInt32(SD.CartSessionKey) != null)
+                        {
+                            <li style="color:white">
+                                <a href="#" class="nav-link">
+                                    @{
+                                        var count = httpContextAccessor.HttpContext.Session.GetInt32(SD.CartSessionKey);
+                                    }
+                                    <i class="fas fa-shopping-cart"></i> (@count)
+                                </a>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li style="color:white">
+                                <a href="#" class="nav-link">
+                                    @{
+                                        var count = httpContextAccessor.HttpContext.Session.GetInt32(SD.CartSessionKey);
+                                    }
+                                    <i class="fas fa-shopping-cart"></i> (0)
+                                </a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>

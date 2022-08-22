@@ -43,6 +43,7 @@
                             <td>
                                 <partial name="_TableButtonPartial" model="item.Id" />
                             </td>
+                            <td><a asp-action="Delete" asp-route-id="@item.Id">Delete for sure</a></td>
                         </tr>
                     }
                 </tbody>
